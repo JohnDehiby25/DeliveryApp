@@ -1,10 +1,10 @@
-package co.edu.uniquindio.poo.appdelivery.model;
+package co.edu.uniquindio.poo.appdelivery.model.persona;
 
 public class PersonaBuilder {
-    private String nombre;
-    private String id;
-    private String telefono;
-    private String email;
+    protected String nombre;
+    protected String id;
+    protected String telefono;
+    protected String email;
 
 
     public PersonaBuilder(String nombre, String id, String telefono, String email) {

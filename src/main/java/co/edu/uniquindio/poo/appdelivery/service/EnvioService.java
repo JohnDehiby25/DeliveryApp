@@ -1,10 +1,16 @@
-package co.edu.uniquindio.poo.appdelivery.model;
+package co.edu.uniquindio.poo.appdelivery.service;
+
+import co.edu.uniquindio.poo.appdelivery.model.direccion.Direccion;
+import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
+import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
+import co.edu.uniquindio.poo.appdelivery.model.paquete.Paquete;
+import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Envio {
+public class EnvioService {
 
     private int idEnvio;
     private Direccion origen;
@@ -26,6 +32,7 @@ public class Envio {
                  double costo, EstadoEnvio estado, LocalDateTime fechaCreacion,
                  LocalDateTime fechaEstimadaEntrega, Usuario usuario, Repartidor repartidor,
                  Pago pago, GestorTarifa gestorTarifa) {
+
         this.idEnvio = idEnvio;
         this.origen = origen;
         this.destino = destino;
@@ -42,16 +49,12 @@ public class Envio {
         this.listNotificaciones = new ArrayList<>();
         this.Listincidencias = new ArrayList<>();
     }
+
     // Métodos de Estado
     public EstadoEnvio actualizarEstado(EstadoEnvio nuevoEstado) {
         this.estado = nuevoEstado;
         notificarObserversNotificacion();
         return this.estado;
-    }
-
-    // Métodos de Servicios Adicionales
-    public void agregarServicioAdicional(ServicioAdicional servicioAdicional) {
-        this.serviciosAdicionales.add(servicioAdicional);
     }
 
     // Métodos de Cálculo de Costos
@@ -101,20 +104,17 @@ public class Envio {
 
         return detalles.toString();
     }
-
-    // Métodos de Pago
-    public void registrarPago(Pago pagoRegistrar) {
-        this.pago = pagoRegistrar;
-        pagoRegistrar.setEnvio(this);
-    }
-
     public Pago obtenerPagoPorFecha(LocalDateTime fechaObtener) {
         if (this.pago != null && this.pago.getFechaPago().equals(fechaObtener)) {
             return this.pago;
         }
         return null;
     }
-
+    // Métodos de Pago
+    public void registrarPago(Pago pagoRegistrar) {
+        this.pago = pagoRegistrar;
+        pagoRegistrar.setEnvio(this);
+    }
     public void consultarComprobantePago() {
         if (this.pago != null) {
             System.out.println("=== COMPROBANTE DE PAGO ===");
@@ -128,23 +128,18 @@ public class Envio {
             System.out.println("No hay pago registrado para este envío.");
         }
     }
-
-    // Métodos de Incidencias
-    public void agregarIncidencias(Incidencia incidencia) {
-        this.listIncidencias.add(incidencia);
+    // Métodos de Notificaciones (Patrón Observer)
+    public List<INotificacionObserver> agregarObserversNotificacion(INotificacionObserver observer) {
+        this.listNotificaciones.add(observer);
+        return this.listNotificaciones;
     }
 
-    public List<Incidencia> obtenerIncidencias() {
-        return this.listIncidencias;
-    }
-
-    public Incidencia getIncidenciaActual() {
-        if (!listIncidencias.isEmpty()) {
-            return listIncidencias.get(listIncidencias.size() - 1);
+    public List<INotificacionObserver> notificarObserversNotificacion() {
+        for (INotificacionObserver observer : listNotificaciones) {
+            observer.actualizar(this);
         }
-        return null;
+        return this.listNotificaciones;
     }
-
     public String obtenerResumenIncidencias() {
         if (listIncidencias.isEmpty()) {
             return "No hay incidencias registradas para este envío.";
@@ -165,97 +160,20 @@ public class Envio {
 
         return resumen.toString();
     }
-
-    // Métodos de Notificaciones (Patrón Observer)
-    public List<INotificacionObserver> agregarObserversNotificacion(INotificacionObserver observer) {
-        this.listNotificaciones.add(observer);
-        return this.listNotificaciones;
-    }
-
-    public List<INotificacionObserver> notificarObserversNotificacion() {
-        for (INotificacionObserver observer : listNotificaciones) {
-            observer.actualizar(this);
+    public Incidencia getIncidenciaActual() {
+        if (!listIncidencias.isEmpty()) {
+            return listIncidencias.get(listIncidencias.size() - 1);
         }
-        return this.listNotificaciones;
+        return null;
     }
 
-    public int getIdEnvio() {
-        return idEnvio;
-    }
 
-    public void setIdEnvio(int idEnvio) {
-        this.idEnvio = idEnvio;
-    }
 
-    public Direccion getOrigen() {
-        return origen;
-    }
 
-    public void setOrigen(Direccion origen) {
-        this.origen = origen;
-    }
 
-    public Direccion getDestino() {
-        return destino;
-    }
 
-    public void setDestino(Direccion destino) {
-        this.destino = destino;
-    }
 
-    public Paquete getPaquete() {
-        return paquete;
-    }
 
-    public void setPaquete(Paquete paquete) {
-        this.paquete = paquete;
-    }
 
-    public double getCosto() {
-        return costo;
-    }
 
-    public void setCosto(double costo) {
-        this.costo = costo;
-    }
-
-    public EstadoEnvio getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoEnvio estado) {
-        this.estado = estado;
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public LocalDateTime getFechaEstimadaEntrega() {
-        return fechaEstimadaEntrega;
-    }
-
-    public void setFechaEstimadaEntrega(LocalDateTime fechaEstimadaEntrega) {
-        this.fechaEstimadaEntrega = fechaEstimadaEntrega;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Repartidor getRepartidor() {
-        return repartidor;
-    }
-
-    public void setRepartidor(Repartidor repartidor) {
-        this.repartidor = repartidor;
-    }
 }

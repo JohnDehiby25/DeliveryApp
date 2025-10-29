@@ -1,4 +1,6 @@
-package co.edu.uniquindio.poo.appdelivery.model;
+package co.edu.uniquindio.poo.appdelivery.model.incidencia;
+
+import co.edu.uniquindio.poo.appdelivery.model.envio.Envio;
 
 import java.time.LocalDateTime;
 

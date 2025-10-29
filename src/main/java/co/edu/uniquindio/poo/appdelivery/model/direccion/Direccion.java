@@ -1,4 +1,4 @@
-package co.edu.uniquindio.poo.appdelivery.model;
+package co.edu.uniquindio.poo.appdelivery.model.direccion;
 
 public class Direccion {
 

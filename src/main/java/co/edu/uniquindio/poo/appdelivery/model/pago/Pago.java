@@ -1,4 +1,4 @@
-package co.edu.uniquindio.poo.appdelivery.model;
+package co.edu.uniquindio.poo.appdelivery.model.pago;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
