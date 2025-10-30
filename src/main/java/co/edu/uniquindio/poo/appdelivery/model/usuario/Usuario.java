@@ -38,4 +38,15 @@ public class Usuario extends Persona {
     public void setListEnvios(ArrayList<Envio> listEnvios) {
         this.listEnvios = listEnvios;
     }
+
+    @Override
+    public String toString() {
+        return "Usuario " +
+                "listDirecciones = " + listDirecciones +
+                ", listEnvios = " + listEnvios +
+                ", email = " + email + '\'' +
+                ", id = " + id + '\'' +
+                ", telefono = " + telefono + '\'' +
+                ", nombre = " + nombre + '\'';
+    }
 }

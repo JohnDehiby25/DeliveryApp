@@ -5,6 +5,7 @@ import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
 import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
 import co.edu.uniquindio.poo.appdelivery.model.paquete.Paquete;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
+import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class Envio {
     private Pago pago;
     private GestorTarifa gestorTarifa;
     private List<ServicioAdicional> serviciosAdicionales;
-    private List<Incidencia> Listincidencias;
+    private List<Incidencia> ListIncidencias;
     private List<INotificacionObserver> listNotificaciones;
 
     public Envio(int idEnvio, Direccion origen, Direccion destino, Paquete paquete,
@@ -142,4 +143,12 @@ public class Envio {
     public void setRepartidor(Repartidor repartidor) {
         this.repartidor = repartidor;
     }
+
+    @Override
+    public String toString() {
+        return "Envio ID: " + idEnvio +
+                ", Fecha estimada: " + fechaEstimadaEntrega +
+                ", Dirección destino: " + destino;
+    }
+
 }
