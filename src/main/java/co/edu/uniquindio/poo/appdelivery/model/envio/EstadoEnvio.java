@@ -2,7 +2,7 @@ package co.edu.uniquindio.poo.appdelivery.model.envio;
 
 public enum EstadoEnvio {
     SOLICITADO,
-    ASIGANDO,
+    ASIGNADO,
     EN_RUTA,
     ENTREGADO,
     INCIDENCIA,

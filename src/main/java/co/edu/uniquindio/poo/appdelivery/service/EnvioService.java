@@ -1,10 +1,14 @@
 package co.edu.uniquindio.poo.appdelivery.service;
 
 import co.edu.uniquindio.poo.appdelivery.model.direccion.Direccion;
+import co.edu.uniquindio.poo.appdelivery.model.envio.EstadoEnvio;
+import co.edu.uniquindio.poo.appdelivery.model.envio.INotificacionObserver;
+import co.edu.uniquindio.poo.appdelivery.model.envio.ServicioAdicional;
 import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
 import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
 import co.edu.uniquindio.poo.appdelivery.model.paquete.Paquete;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
+import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,7 +32,7 @@ public class EnvioService {
     private List<Incidencia> Listincidencias;
     private List<INotificacionObserver> listNotificaciones;
 
-    public Envio(int idEnvio, Direccion origen, Direccion destino, Paquete paquete,
+    public EnvioService(int idEnvio, Direccion origen, Direccion destino, Paquete paquete,
                  double costo, EstadoEnvio estado, LocalDateTime fechaCreacion,
                  LocalDateTime fechaEstimadaEntrega, Usuario usuario, Repartidor repartidor,
                  Pago pago, GestorTarifa gestorTarifa) {
@@ -129,16 +133,16 @@ public class EnvioService {
         }
     }
     // Métodos de Notificaciones (Patrón Observer)
-    public List<INotificacionObserver> agregarObserversNotificacion(INotificacionObserver observer) {
-        this.listNotificaciones.add(observer);
-        return this.listNotificaciones;
+    public void agregarObserversNotificacion(INotificacionObserver observer) {
+        if(!listNotificaciones.contains(observer)){
+            listNotificaciones.add(observer);
+        }
     }
 
-    public List<INotificacionObserver> notificarObserversNotificacion() {
+    public void notificarObserversNotificacion() {
         for (INotificacionObserver observer : listNotificaciones) {
             observer.actualizar(this);
         }
-        return this.listNotificaciones;
     }
     public String obtenerResumenIncidencias() {
         if (listIncidencias.isEmpty()) {

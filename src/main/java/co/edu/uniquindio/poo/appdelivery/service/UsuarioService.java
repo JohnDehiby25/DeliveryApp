@@ -5,7 +5,6 @@ import co.edu.uniquindio.poo.appdelivery.model.envio.Envio;
 import co.edu.uniquindio.poo.appdelivery.model.envio.EstadoEnvio;
 import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -114,6 +113,26 @@ public class UsuarioService {
         }
         return null;
     }
+
+    public String crearSolicitudEnvio(int idEnvioSolicitar,Usuario u){
+       Envio envio = buscarEnvioPorId(idEnvioSolicitar,u);
+       if(envio == null){
+           return "El envio no existe, no puede ser solicitado";
+       }
+
+       if(envio.getEstado() == EstadoEnvio.SOLICITADO ||
+               envio.getEstado() == EstadoEnvio.ASIGNADO ||
+               envio.getEstado() == EstadoEnvio.CANCELADO ||
+               envio.getEstado() == EstadoEnvio.EN_RUTA ||
+               envio.getEstado() == EstadoEnvio.ENTREGADO ||
+               envio.getEstado() == EstadoEnvio.INCIDENCIA){
+
+           return "No se puede solicitar el envio"+ envio.getEstado();
+       }
+       envio.setEstado(EstadoEnvio.SOLICITADO);
+       return "El envio ha sido solicitado " + envio.getEstado();
+    }
+
 
 
 }
