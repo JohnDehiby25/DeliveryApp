@@ -19,6 +19,46 @@ public class Pago {
         this.estadoPago = estadoPago;
     }
 
+    public String getIdPago() {
+        return idPago;
+    }
+
+    public void setIdPago(String idPago) {
+        this.idPago = idPago;
+    }
+
+    public EstadoPago getEstadoPago() {
+        return estadoPago;
+    }
+
+    public void setEstadoPago(EstadoPago estadoPago) {
+        this.estadoPago = estadoPago;
+    }
+
+    public MetodoPago getMetodoPago() {
+        return metodoPago;
+    }
+
+    public void setMetodoPago(MetodoPago metodoPago) {
+        this.metodoPago = metodoPago;
+    }
+
+    public LocalDateTime getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(LocalDateTime fechaPago) {
+        this.fechaPago = fechaPago;
+    }
+
+    public double getMonto() {
+        return monto;
+    }
+
+    public void setMonto(double monto) {
+        this.monto = monto;
+    }
+
     public void pagarTarifa() {
         if (estadoPago == EstadoPago.APROBADO) {
             System.out.println(" Iniciando pago con método: " + metodoPago);
