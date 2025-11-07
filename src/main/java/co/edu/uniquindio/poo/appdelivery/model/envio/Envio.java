@@ -5,6 +5,7 @@ import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
 import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
 import co.edu.uniquindio.poo.appdelivery.model.paquete.Paquete;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
+import co.edu.uniquindio.poo.appdelivery.model.tarifa.GestorTarifa;
 import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ public class Envio {
     private Direccion origen;
     private Direccion destino;
     private Paquete paquete;
-    private double costo;
+    private double costo,distanciaPorKm;
     private EstadoEnvio estado;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaEstimadaEntrega;
@@ -53,6 +54,10 @@ public class Envio {
     // Métodos de Servicios Adicionales
     public void agregarServicioAdicional(ServicioAdicional servicioAdicional) {
         this.serviciosAdicionales.add(servicioAdicional);
+    }
+
+    public double getDistanciaPorKm() {
+        return distanciaPorKm;
     }
 
     // Métodos de Incidencias

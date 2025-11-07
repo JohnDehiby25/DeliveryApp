@@ -8,6 +8,7 @@ import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
 import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
 import co.edu.uniquindio.poo.appdelivery.model.paquete.Paquete;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
+import co.edu.uniquindio.poo.appdelivery.model.tarifa.Tarifa;
 import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 
 import java.time.LocalDateTime;
