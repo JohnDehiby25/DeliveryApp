@@ -5,7 +5,7 @@ import co.edu.uniquindio.poo.appdelivery.model.envio.Envio;
 public class Tarifa {
 
     private ITarifaStrategy estrategia;
-    private static double tarifaInicial = 20000;
+    private double tarifaBase = 20000;
 
     public Tarifa(ITarifaStrategy estrategia){
         this.estrategia= estrategia;
@@ -15,17 +15,18 @@ public class Tarifa {
         this.estrategia = estrategia;
     }
     public String obtenerDesgloseEnvio(Envio envio){
-        return "Id Envio: " + envio.getIdEnvio() +
+        return estrategia.desgloseTarifa(envio,this) +
+                "Id Envio: " + envio.getIdEnvio() +
                 "Direccion origen: " + envio.getOrigen() +
                 "Direccion destino: " + envio.getDestino() +
                 "Costo Total Tarifa: " + calcularTotalTarifa(envio);
 
     }
     public double calcularTotalTarifa(Envio envio){
-        return tarifaInicial + estrategia.calcularTarifa(envio);
+        return tarifaBase + estrategia.calcularTarifa(envio,this);
     }
-
-
-
+    public void setTarifaBase(double tarifaBase){
+        this.tarifaBase = tarifaBase;
+    }
 
 }

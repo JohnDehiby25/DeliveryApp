@@ -18,7 +18,7 @@ public class Envio {
     private Direccion origen;
     private Direccion destino;
     private Paquete paquete;
-    private double costo,distanciaPorKm;
+    private double costo,distanciaporKm;
     private EstadoEnvio estado;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaEstimadaEntrega;
@@ -54,10 +54,6 @@ public class Envio {
     // Métodos de Servicios Adicionales
     public void agregarServicioAdicional(ServicioAdicional servicioAdicional) {
         this.serviciosAdicionales.add(servicioAdicional);
-    }
-
-    public double getDistanciaPorKm() {
-        return distanciaPorKm;
     }
 
     // Métodos de Incidencias
@@ -131,6 +127,10 @@ public class Envio {
 
     public void setFechaEstimadaEntrega(LocalDateTime fechaEstimadaEntrega) {
         this.fechaEstimadaEntrega = fechaEstimadaEntrega;
+    }
+
+    public double getDistanciaporKm() {
+        return distanciaporKm;
     }
 
     public Usuario getUsuario() {
