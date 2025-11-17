@@ -57,4 +57,5 @@ public class Repartidor extends Persona {
     public void setZonaCobertura(int zonaCobertura) {
         this.zonaCobertura = zonaCobertura;
     }
+
 }

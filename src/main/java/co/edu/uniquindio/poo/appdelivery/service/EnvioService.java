@@ -21,11 +21,14 @@ public class EnvioService {
     private List<Envio> envios;
     private UsuarioService usuarioService;
     private RepartidorService repartidorService;
+    private AdministradorService administradorService;
 
-    public EnvioService(UsuarioService usuarioService, RepartidorService repartidorService) {
+    public EnvioService(UsuarioService usuarioService, RepartidorService repartidorService,
+                        AdministradorService administradorService) {
         this.envios = new ArrayList<>();
         this.usuarioService = usuarioService;
         this.repartidorService = repartidorService;
+        this.administradorService = administradorService;
     }
     public List<EnvioDTO> obtenerTodosLosEnvios() {
         List<EnvioDTO> enviosDTO = new ArrayList<>();

@@ -3,7 +3,6 @@ package co.edu.uniquindio.poo.appdelivery.service;
 import co.edu.uniquindio.poo.appdelivery.model.direccion.Direccion;
 import co.edu.uniquindio.poo.appdelivery.model.envio.Envio;
 import co.edu.uniquindio.poo.appdelivery.model.envio.EstadoEnvio;
-import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
 import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 
 import java.time.LocalDateTime;

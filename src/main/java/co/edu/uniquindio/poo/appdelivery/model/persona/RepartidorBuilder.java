@@ -2,6 +2,7 @@ package co.edu.uniquindio.poo.appdelivery.model.persona;
 
 import co.edu.uniquindio.poo.appdelivery.model.envio.Envio;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
+import co.edu.uniquindio.poo.appdelivery.model.repartidor.TipoDisponibilidad;
 
 import java.util.ArrayList;
 
