@@ -3,6 +3,7 @@ package co.edu.uniquindio.poo.appdelivery.model.pago;
 import co.edu.uniquindio.poo.appdelivery.model.envio.Envio;
 import co.edu.uniquindio.poo.appdelivery.model.tarifa.GestorTarifa;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,6 +11,7 @@ public abstract class Pago {
 
     protected String idPago;
     protected double monto;
+    protected LocalDate fechaPago;
     protected EstadoPago estadoPago;
     protected Envio envio;
 
@@ -119,5 +121,10 @@ public abstract class Pago {
 
         return comprobante.toString();
     }
+
+    public LocalDate getFechaPago() {
+        return fechaPago;
+    }
+
 }
 

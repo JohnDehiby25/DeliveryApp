@@ -60,13 +60,10 @@ public class Direccion {
         this.ciudad = ciudad;
     }
 
-    @Override
-    public String toString() {
-        return "Direccion" +
-                "idDireccion = " + idDireccion +
-                ", ciudad = " + ciudad + '\'' +
-                ", alias = " + alias + '\'' +
-                ", calle = " + calle + '\'' +
-                ", coordenadas = " + coordenadas + '\'';
+    public String consultarDetalles() {
+        return "Ciudad: " + ciudad +
+                ", Calle: " + calle +
+                ", Alias: " + alias +
+                ", Coordenadas: " + coordenadas;
     }
 }

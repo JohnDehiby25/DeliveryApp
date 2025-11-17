@@ -8,6 +8,7 @@ import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
 import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.TipoDisponibilidad;
+import co.edu.uniquindio.poo.appdelivery.model.reporte.Reporte;
 import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 
 import java.util.ArrayList;
@@ -23,7 +24,9 @@ public class AdministradorService {
     public AdministradorService(Administrador administrador) {
         this.administrador = administrador;
     }
-
+    public void generarReporte(Reporte reporte) {
+        administrador.generarReporte(reporte);
+    }
     public boolean eliminarUsuario(String idUsuario) {
         Usuario usuario = buscarUsuarioPorId(idUsuario);
         if (usuario == null) {

@@ -8,6 +8,7 @@ import co.edu.uniquindio.poo.appdelivery.model.envio.ServicioAdicional;
 import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
 import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
 
+import co.edu.uniquindio.poo.appdelivery.model.paquete.Paquete;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
 import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 import co.edu.uniquindio.poo.appdelivery.utils.mappers.EnvioMapper;
@@ -94,13 +95,15 @@ public class EnvioService {
     public double calcularCostoTotal(int idEnvio) {
         Envio envio = buscarEnvioEntity(idEnvio);
         if (envio == null) return 0.0;
-
-        double costoTotal = envio.getCosto();
+        double costoTotal = envio.getCosto() ;
 
         if (envio.getServiciosAdicionales() != null) {
             for (ServicioAdicional servicio : envio.getServiciosAdicionales()) {
                 costoTotal += servicio.getValorAsegurado();
             }
+        }
+        if (envio.getPaquete() != null) {
+            costoTotal += envio.getPaquete().calcularCostoPaquete();
         }
 
         return costoTotal;
@@ -188,7 +191,7 @@ public class EnvioService {
             System.out.println("=== COMPROBANTE DE PAGO ===");
             System.out.println("ID Envío: " + envio.getIdEnvio());
             System.out.println("Monto: $" + envio.getPago().getMonto());
-            System.out.println("Método de Pago: " + envio.getPago().getMetodoPago());
+            System.out.println("Método de Pago: " + envio.getPago());
             System.out.println("Fecha: " + envio.getPago().getFechaPago());
             System.out.println("Estado: " + envio.getPago().getEstadoPago());
             System.out.println("===========================");

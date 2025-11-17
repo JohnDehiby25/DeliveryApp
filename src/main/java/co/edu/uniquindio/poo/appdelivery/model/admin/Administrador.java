@@ -5,6 +5,7 @@ import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
 import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
 import co.edu.uniquindio.poo.appdelivery.model.persona.Persona;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
+import co.edu.uniquindio.poo.appdelivery.model.reporte.Reporte;
 import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class Administrador extends Persona {
     private ArrayList<Envio> listEnvios;
     private ArrayList<Pago> listPagos;
     private ArrayList<Incidencia> listIncidencias;
+
 
     public Administrador(String nombre, String id, String telefono, String email){
         super(nombre,id,telefono,email);
@@ -33,6 +35,9 @@ public class Administrador extends Persona {
         this.listIncidencias = new ArrayList<>();
     }
 
+    public void generarReporte(Reporte reporte) {
+        reporte.generarReporte();
+    }
     public ArrayList<Usuario> getListUsuarios() {
         return listUsuarios;
     }
