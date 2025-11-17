@@ -56,11 +56,11 @@ public class EnvioService {
         Usuario usuario = null;
         Repartidor repartidor = null;
 
-        if (envioDTO.getIdUsuario() != 0) {
+        if (envioDTO.getIdUsuario() != null && !envioDTO.getIdUsuario().isEmpty()) {
             usuario = usuarioService.buscarUsuarioEntity(envioDTO.getIdUsuario());
         }
 
-        if (envioDTO.getIdRepartidor() != 0) {
+        if (envioDTO.getIdRepartidor() != null && !envioDTO.getIdRepartidor().isEmpty()) {
             repartidor = repartidorService.buscarRepartidorEntity(envioDTO.getIdRepartidor());
         }
         Envio envio = EnvioMapper.toEntity(envioDTO, usuario, repartidor);

@@ -3,13 +3,19 @@ package co.edu.uniquindio.poo.appdelivery.service;
 import co.edu.uniquindio.poo.appdelivery.model.direccion.Direccion;
 import co.edu.uniquindio.poo.appdelivery.model.envio.Envio;
 import co.edu.uniquindio.poo.appdelivery.model.envio.EstadoEnvio;
+import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
 import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioService {
 
+   private List<Usuario> usuarios;
+   public UsuarioService(){
+       this.usuarios = new ArrayList<>();
+   }
    public Direccion crearDireccion(Usuario usuario, int idDireccion, String ciudad, String alias,
                                    String calle, String coordenadas){
 
@@ -134,5 +140,12 @@ public class UsuarioService {
     }
 
 
-
+    public Usuario buscarUsuarioEntity(String documentoUsuario) {
+        for (Usuario  usuario : usuarios) {
+            if (usuario.getId().equalsIgnoreCase(documentoUsuario)) {
+                return usuario;
+            }
+        }
+        return null;
+    }
 }

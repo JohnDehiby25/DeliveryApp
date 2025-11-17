@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public class EnvioDTO {
     private int idEnvio;
-    private int idUsuario;
-    private int idRepartidor;
+    private String idUsuario;
+    private String idRepartidor;
     private String estado;
     private double costo;
     private double distanciaPorKm;
@@ -18,7 +18,7 @@ public class EnvioDTO {
 
     public EnvioDTO(){}
 
-    public EnvioDTO(int idEnvio, int idRepartidor, int idUsuario,
+    public EnvioDTO(int idEnvio, String idRepartidor, String idUsuario,
                     PaqueteDTO paquete, DireccionDTO destino,
                     DireccionDTO origen, LocalDateTime fechaEstimadaEntrega,
                     LocalDateTime fechaCreacion, double costo,double distanciaPorKm, String estado) {
@@ -43,19 +43,19 @@ public class EnvioDTO {
         this.idEnvio = idEnvio;
     }
 
-    public int getIdRepartidor() {
+    public String getIdRepartidor() {
         return idRepartidor;
     }
 
-    public void setIdRepartidor(int idRepartidor) {
+    public void setIdRepartidor(String idRepartidor) {
         this.idRepartidor = idRepartidor;
     }
 
-    public int getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
 
