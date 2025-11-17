@@ -1,5 +1,6 @@
 package co.edu.uniquindio.poo.appdelivery.service;
 
+import co.edu.uniquindio.poo.appdelivery.model.DTOs.EnvioDTO;
 import co.edu.uniquindio.poo.appdelivery.model.direccion.Direccion;
 import co.edu.uniquindio.poo.appdelivery.model.envio.EstadoEnvio;
 import co.edu.uniquindio.poo.appdelivery.model.envio.INotificacionObserver;
@@ -8,6 +9,7 @@ import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
 import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
 import co.edu.uniquindio.poo.appdelivery.model.paquete.Paquete;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
+import co.edu.uniquindio.poo.appdelivery.model.tarifa.GestorTarifa;
 import co.edu.uniquindio.poo.appdelivery.model.tarifa.Tarifa;
 import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
 
@@ -30,7 +32,7 @@ public class EnvioService {
     private Pago pago;
     private GestorTarifa gestorTarifa;
     private List<ServicioAdicional> serviciosAdicionales;
-    private List<Incidencia> Listincidencias;
+    private List<Incidencia> listIncidencias;
     private List<INotificacionObserver> listNotificaciones;
 
     public EnvioService(int idEnvio, Direccion origen, Direccion destino, Paquete paquete,
@@ -52,7 +54,7 @@ public class EnvioService {
         this.gestorTarifa = gestorTarifa;
         this.serviciosAdicionales = new ArrayList<>();
         this.listNotificaciones = new ArrayList<>();
-        this.Listincidencias = new ArrayList<>();
+        this.listIncidencias = new ArrayList<>();
     }
 
     // Métodos de Estado
@@ -67,18 +69,18 @@ public class EnvioService {
         double costoTotal = this.costo;
 
         for (ServicioAdicional servicio : serviciosAdicionales) {
-            costoTotal += servicio.getCosto();
+            costoTotal += servicio.getValorAsegurado();
         }
 
         return costoTotal;
     }
 
     public double calcularCostoTotalTarifaYEnvio(Tarifa tarifa) {
-        double costoTarifa = tarifa.calcularCosto(this.paquete);
+        double costoTarifa = tarifa.calcularCosto(EnvioDTO);
         double costoServicios = 0;
 
         for (ServicioAdicional servicio : serviciosAdicionales) {
-            costoServicios += servicio.getCosto();
+            costoServicios += servicio.getValorAsegurado();
         }
 
         return costoTarifa + costoServicios;
@@ -139,7 +141,6 @@ public class EnvioService {
             listNotificaciones.add(observer);
         }
     }
-
     public void notificarObserversNotificacion() {
         for (INotificacionObserver observer : listNotificaciones) {
             observer.actualizar(this);
@@ -157,10 +158,7 @@ public class EnvioService {
         for (int i = 0; i < listIncidencias.size(); i++) {
             Incidencia inc = listIncidencias.get(i);
             resumen.append("Incidencia #").append(i + 1).append(":\n");
-            resumen.append("  Tipo: ").append(inc.getTipo()).append("\n");
-            resumen.append("  Descripción: ").append(inc.getDescripcion()).append("\n");
-            resumen.append("  Fecha: ").append(inc.getFecha()).append("\n");
-            resumen.append("  Estado: ").append(inc.getEstado()).append("\n\n");
+            resumen.append(inc.obtenerResumen()).append("\n\n");
         }
 
         return resumen.toString();
@@ -171,14 +169,4 @@ public class EnvioService {
         }
         return null;
     }
-
-
-
-
-
-
-
-
-
-
 }

@@ -27,7 +27,7 @@ public class Envio {
     private Pago pago;
     private GestorTarifa gestorTarifa;
     private List<ServicioAdicional> serviciosAdicionales;
-    private List<Incidencia> ListIncidencias;
+    private List<Incidencia> listIncidencias;
     private List<INotificacionObserver> listNotificaciones;
 
     public Envio(int idEnvio, Direccion origen, Direccion destino, Paquete paquete,
@@ -48,7 +48,7 @@ public class Envio {
         this.gestorTarifa = gestorTarifa;
         this.serviciosAdicionales = new ArrayList<>();
         this.listNotificaciones = new ArrayList<>();
-        this.Listincidencias = new ArrayList<>();
+        this.listIncidencias = new ArrayList<>();
     }
 
     // Métodos de Servicios Adicionales
