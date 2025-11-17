@@ -3,6 +3,7 @@ package co.edu.uniquindio.poo.appdelivery.service;
 import co.edu.uniquindio.poo.appdelivery.model.admin.Administrador;
 import co.edu.uniquindio.poo.appdelivery.model.direccion.Direccion;
 import co.edu.uniquindio.poo.appdelivery.model.envio.Envio;
+import co.edu.uniquindio.poo.appdelivery.model.envio.EstadoEnvio;
 import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
 import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
@@ -340,15 +341,6 @@ public class AdministradorService {
     }
 
 
-    public Repartidor buscarRepartidorPorId(String id) {
-        for (Repartidor repartidor : administrador.getListRepartidores()) {
-            if (repartidor.getId().equalsIgnoreCase(id)) {
-                return repartidor;
-            }
-        }
-        return null;
-    }
-
     private Envio buscarEnvioPorId(int idEnvio) {
         for (Envio envio : administrador.getListEnvios()) {
             if (envio.getIdEnvio() == idEnvio) {
@@ -367,8 +359,6 @@ public class AdministradorService {
         return null;
     }
 
-    // ========= GETTERS =========
-
     public List<Usuario> obtenerTodosLosUsuarios() {
         return new ArrayList<>(administrador.getListUsuarios());
     }
@@ -380,7 +370,7 @@ public class AdministradorService {
     public List<Repartidor> obtenerRepartidoresDisponibles() {
         List<Repartidor> disponibles = new ArrayList<>();
         for (Repartidor r : administrador.getListRepartidores()) {
-            if (r.getTipodisponibilidad() == TipoDisponibilidad.INACTIVO) {
+            if (r.getTipodisponibilidad() == TipoDisponibilidad.ACTIVO) {
                 disponibles.add(r);
             }
         }
@@ -389,5 +379,51 @@ public class AdministradorService {
 
     public Administrador getAdministrador() {
         return administrador;
+    }
+    //Metodo Adicionales del repartidor
+    public Envio cambiarEstadoEnvio(int idEnvio, EstadoEnvio nuevoEstado) {
+        Envio envio = buscarEnvioPorId(idEnvio);
+        if (envio == null) {
+            throw new IllegalArgumentException("Envío no encontrado");
+        }
+
+        envio.setEstado(nuevoEstado);
+        envio.notificarObserversNotificacion();
+        return envio;
+    }
+    public List<Envio> consultarEnviosAsignados(String documentoRepartidor) {
+        Repartidor repartidor = buscarRepartidorPorDocumento(documentoRepartidor);
+        if (repartidor == null) {
+            System.out.println("Repartidor no encontrado");
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(repartidor.getListEnvios());
+    }
+    public List<Envio> consultarEnviosAsignados(Repartidor repartidor) {
+        if (repartidor == null) {
+            System.out.println("Repartidor no válido");
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(repartidor.getListEnvios());
+    }
+    public List<Repartidor> filtrarRepartidoresPorZona(int zona) {
+        List<Repartidor> repartidoresEnZona = new ArrayList<>();
+        for (Repartidor r : administrador.getListRepartidores()) {
+            if (r.getZonaCobertura() == zona) {
+                repartidoresEnZona.add(r);
+            }
+        }
+        return repartidoresEnZona;
+    }
+    public List<Repartidor> filtrarRepartidoresPorDisponibilidad(TipoDisponibilidad disponibilidad) {
+        List<Repartidor> repartidoresFiltrados = new ArrayList<>();
+        for (Repartidor r : administrador.getListRepartidores()) {
+            if (r.getTipodisponibilidad() == disponibilidad) {
+                repartidoresFiltrados.add(r);
+            }
+        }
+        return repartidoresFiltrados;
     }
 }

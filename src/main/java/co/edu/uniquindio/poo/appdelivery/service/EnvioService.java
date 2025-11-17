@@ -20,14 +20,12 @@ import java.util.List;
 public class EnvioService {
     private List<Envio> envios;
     private UsuarioService usuarioService;
-    private RepartidorService repartidorService;
     private AdministradorService administradorService;
 
-    public EnvioService(UsuarioService usuarioService, RepartidorService repartidorService,
+    public EnvioService(UsuarioService usuarioService,
                         AdministradorService administradorService) {
         this.envios = new ArrayList<>();
         this.usuarioService = usuarioService;
-        this.repartidorService = repartidorService;
         this.administradorService = administradorService;
     }
     public List<EnvioDTO> obtenerTodosLosEnvios() {
@@ -56,16 +54,18 @@ public class EnvioService {
         if (buscarEnvioEntity(envioDTO.getIdEnvio()) != null) {
             return false;
         }
+
         Usuario usuario = null;
         Repartidor repartidor = null;
 
         if (envioDTO.getIdUsuario() != null && !envioDTO.getIdUsuario().isEmpty()) {
-            usuario = usuarioService.buscarUsuarioEntity(envioDTO.getIdUsuario());
+            usuario = administradorService.buscarUsuarioPorId(envioDTO.getIdUsuario());
         }
 
         if (envioDTO.getIdRepartidor() != null && !envioDTO.getIdRepartidor().isEmpty()) {
-            repartidor = repartidorService.buscarRepartidorEntity(envioDTO.getIdRepartidor());
+            repartidor = administradorService.buscarRepartidorPorDocumento(envioDTO.getIdRepartidor());
         }
+
         Envio envio = EnvioMapper.toEntity(envioDTO, usuario, repartidor);
         envios.add(envio);
         return true;
