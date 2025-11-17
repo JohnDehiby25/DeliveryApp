@@ -3,9 +3,12 @@ package co.edu.uniquindio.poo.appdelivery.model.DTOs;
 import java.time.LocalDateTime;
 
 public class EnvioDTO {
-    private int idEnvio,idUsuario,idRepartidor;
+    private int idEnvio;
+    private int idUsuario;
+    private int idRepartidor;
     private String estado;
     private double costo;
+    private double distanciaPorKm;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaEstimadaEntrega;
 
@@ -18,7 +21,7 @@ public class EnvioDTO {
     public EnvioDTO(int idEnvio, int idRepartidor, int idUsuario,
                     PaqueteDTO paquete, DireccionDTO destino,
                     DireccionDTO origen, LocalDateTime fechaEstimadaEntrega,
-                    LocalDateTime fechaCreacion, double costo, String estado) {
+                    LocalDateTime fechaCreacion, double costo,double distanciaPorKm, String estado) {
 
         this.idEnvio = idEnvio;
         this.idRepartidor = idRepartidor;
@@ -54,6 +57,14 @@ public class EnvioDTO {
 
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public double getDistanciaPorKm() {
+        return distanciaPorKm;
+    }
+
+    public void setDistanciaPorKm(double distanciaPorKm) {
+        this.distanciaPorKm = distanciaPorKm;
     }
 
     public PaqueteDTO getPaquete() {

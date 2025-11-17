@@ -1,172 +1,257 @@
 package co.edu.uniquindio.poo.appdelivery.service;
 
 import co.edu.uniquindio.poo.appdelivery.model.DTOs.EnvioDTO;
-import co.edu.uniquindio.poo.appdelivery.model.direccion.Direccion;
+import co.edu.uniquindio.poo.appdelivery.model.envio.Envio;
 import co.edu.uniquindio.poo.appdelivery.model.envio.EstadoEnvio;
 import co.edu.uniquindio.poo.appdelivery.model.envio.INotificacionObserver;
 import co.edu.uniquindio.poo.appdelivery.model.envio.ServicioAdicional;
 import co.edu.uniquindio.poo.appdelivery.model.incidencia.Incidencia;
 import co.edu.uniquindio.poo.appdelivery.model.pago.Pago;
-import co.edu.uniquindio.poo.appdelivery.model.paquete.Paquete;
+
 import co.edu.uniquindio.poo.appdelivery.model.repartidor.Repartidor;
-import co.edu.uniquindio.poo.appdelivery.model.tarifa.GestorTarifa;
-import co.edu.uniquindio.poo.appdelivery.model.tarifa.Tarifa;
 import co.edu.uniquindio.poo.appdelivery.model.usuario.Usuario;
+import co.edu.uniquindio.poo.appdelivery.utils.mappers.EnvioMapper;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class EnvioService {
+    private List<Envio> envios;
+    private UsuarioService usuarioService;
+    private RepartidorService repartidorService;
 
-    private int idEnvio;
-    private Direccion origen;
-    private Direccion destino;
-    private Paquete paquete;
-    private double costo;
-    private EstadoEnvio estado;
-    private LocalDateTime fechaCreacion;
-    private LocalDateTime fechaEstimadaEntrega;
-    private Usuario usuario;
-    private Repartidor repartidor;
-    private Pago pago;
-    private GestorTarifa gestorTarifa;
-    private List<ServicioAdicional> serviciosAdicionales;
-    private List<Incidencia> listIncidencias;
-    private List<INotificacionObserver> listNotificaciones;
+    public EnvioService(UsuarioService usuarioService, RepartidorService repartidorService) {
+        this.envios = new ArrayList<>();
+        this.usuarioService = usuarioService;
+        this.repartidorService = repartidorService;
+    }
+    public List<EnvioDTO> obtenerTodosLosEnvios() {
+        List<EnvioDTO> enviosDTO = new ArrayList<>();
+        for (Envio envio : envios) {
+            enviosDTO.add(EnvioMapper.toDTO(envio));
+        }
+        return enviosDTO;
+    }
+    /**
+     * Busca un envío por ID y lo devuelve como DTO
+     */
+    public EnvioDTO buscarEnvioPorId(int idEnvio) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        return envio != null ? EnvioMapper.toDTO(envio) : null;
+    }
+    private Envio buscarEnvioEntity(int idEnvio) {
+        for (Envio envio : envios) {
+            if (envio.getIdEnvio() == idEnvio) {
+                return envio;
+            }
+        }
+        return null;
+    }
+    public boolean agregarEnvio(EnvioDTO envioDTO) {
+        if (buscarEnvioEntity(envioDTO.getIdEnvio()) != null) {
+            return false;
+        }
+        Usuario usuario = null;
+        Repartidor repartidor = null;
 
-    public EnvioService(int idEnvio, Direccion origen, Direccion destino, Paquete paquete,
-                 double costo, EstadoEnvio estado, LocalDateTime fechaCreacion,
-                 LocalDateTime fechaEstimadaEntrega, Usuario usuario, Repartidor repartidor,
-                 Pago pago, GestorTarifa gestorTarifa) {
+        if (envioDTO.getIdUsuario() != 0) {
+            usuario = usuarioService.buscarUsuarioEntity(envioDTO.getIdUsuario());
+        }
 
-        this.idEnvio = idEnvio;
-        this.origen = origen;
-        this.destino = destino;
-        this.paquete = paquete;
-        this.costo = costo;
-        this.estado = estado;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaEstimadaEntrega = fechaEstimadaEntrega;
-        this.usuario = usuario;
-        this.repartidor = repartidor;
-        this.pago = pago;
-        this.gestorTarifa = gestorTarifa;
-        this.serviciosAdicionales = new ArrayList<>();
-        this.listNotificaciones = new ArrayList<>();
-        this.listIncidencias = new ArrayList<>();
+        if (envioDTO.getIdRepartidor() != 0) {
+            repartidor = repartidorService.buscarRepartidorEntity(envioDTO.getIdRepartidor());
+        }
+        Envio envio = EnvioMapper.toEntity(envioDTO, usuario, repartidor);
+        envios.add(envio);
+        return true;
     }
 
-    // Métodos de Estado
-    public EstadoEnvio actualizarEstado(EstadoEnvio nuevoEstado) {
-        this.estado = nuevoEstado;
-        notificarObserversNotificacion();
-        return this.estado;
+    public EnvioDTO actualizarEstado(int idEnvio, EstadoEnvio nuevoEstado) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+
+        if (envio == null) {
+            throw new IllegalArgumentException("El envío no puede ser nulo");
+        }
+        if (nuevoEstado == null) {
+            throw new IllegalArgumentException("El nuevo estado no puede ser nulo");
+        }
+
+        envio.setEstado(nuevoEstado);
+        envio.notificarObserversNotificacion();
+
+        return EnvioMapper.toDTO(envio);
     }
+
+
 
     // Métodos de Cálculo de Costos
-    public double calcularCostoTotalEnvio() {
-        double costoTotal = this.costo;
 
-        for (ServicioAdicional servicio : serviciosAdicionales) {
-            costoTotal += servicio.getValorAsegurado();
+    public double calcularCostoTotal(int idEnvio) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null) return 0.0;
+
+        double costoTotal = envio.getCosto();
+
+        if (envio.getServiciosAdicionales() != null) {
+            for (ServicioAdicional servicio : envio.getServiciosAdicionales()) {
+                costoTotal += servicio.getValorAsegurado();
+            }
         }
 
         return costoTotal;
     }
-
-    public double calcularCostoTotalTarifaYEnvio(Tarifa tarifa) {
-        double costoTarifa = tarifa.calcularCosto(EnvioDTO);
-        double costoServicios = 0;
-
-        for (ServicioAdicional servicio : serviciosAdicionales) {
-            costoServicios += servicio.getValorAsegurado();
+    public boolean agregarServicioAdicional(int idEnvio, ServicioAdicional servicio) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null || servicio == null) {
+            return false;
         }
 
-        return costoTarifa + costoServicios;
+        envio.getServiciosAdicionales().add(servicio);
+        return true;
+    }
+    public boolean agregarIncidencia(int idEnvio, Incidencia incidencia) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null || incidencia == null) {
+            return false;
+        }
+
+        envio.obtenerIncidencias().add(incidencia);
+        return true;
     }
 
-    // Metodo de Detalles
-    public String detallesEnvio() {
+    public String obtenerDetallesEnvio(int idEnvio) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null) {
+            return "Envío no encontrado";
+        }
+
         StringBuilder detalles = new StringBuilder();
         detalles.append("=== DETALLES DEL ENVÍO ===\n");
-        detalles.append("ID Envío: ").append(idEnvio).append("\n");
-        detalles.append("Origen: ").append(origen != null ? origen.toString() : "N/A").append("\n");
-        detalles.append("Destino: ").append(destino != null ? destino.toString() : "N/A").append("\n");
-        detalles.append("Estado: ").append(estado).append("\n");
-        detalles.append("Costo: $").append(costo).append("\n");
-        detalles.append("Fecha Creación: ").append(fechaCreacion).append("\n");
-        detalles.append("Fecha Estimada Entrega: ").append(fechaEstimadaEntrega).append("\n");
-        detalles.append("Usuario: ").append(usuario != null ? usuario.getNombre() : "N/A").append("\n");
-        detalles.append("Repartidor: ").append(repartidor != null ? repartidor.getNombre() : "No asignado").append("\n");
+        detalles.append("ID Envío: ").append(envio.getIdEnvio()).append("\n");
+        detalles.append("Origen: ").append(envio.getOrigen() != null ? envio.getOrigen().toString() : "N/A").append("\n");
+        detalles.append("Destino: ").append(envio.getDestino() != null ? envio.getDestino().toString() : "N/A").append("\n");
+        detalles.append("Estado: ").append(envio.getEstado()).append("\n");
+        detalles.append("Costo: $").append(envio.getCosto()).append("\n");
+        detalles.append("Fecha Creación: ").append(envio.getFechaCreacion()).append("\n");
+        detalles.append("Fecha Estimada Entrega: ").append(envio.getFechaEstimadaEntrega()).append("\n");
+        detalles.append("Usuario: ").append(envio.getUsuario() != null ? envio.getUsuario().getNombre() : "N/A").append("\n");
+        detalles.append("Repartidor: ").append(envio.getRepartidor() != null ? envio.getRepartidor().getNombre() : "No asignado").append("\n");
 
-        if (!serviciosAdicionales.isEmpty()) {
+        if (envio.getServiciosAdicionales() != null && !envio.getServiciosAdicionales().isEmpty()) {
             detalles.append("\nServicios Adicionales:\n");
-            for (ServicioAdicional servicio : serviciosAdicionales) {
-                detalles.append("  - ").append(servicio.getNombre()).append(": $").append(servicio.getCosto()).append("\n");
+            for (ServicioAdicional servicio : envio.getServiciosAdicionales()) {
+                detalles.append("  - ").append(servicio.getIdServicio()).append(": $").append(servicio.getValorAsegurado()).append("\n");
             }
         }
 
-        detalles.append("\nCosto Total: $").append(calcularCostoTotalEnvio()).append("\n");
+        detalles.append("\nCosto Total: $").append(calcularCostoTotal(idEnvio)).append("\n");
 
         return detalles.toString();
     }
-    public Pago obtenerPagoPorFecha(LocalDateTime fechaObtener) {
-        if (this.pago != null && this.pago.getFechaPago().equals(fechaObtener)) {
-            return this.pago;
+
+    public Pago obtenerPagoPorFecha(int idEnvio, LocalDateTime fechaObtener) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null || envio.getPago() == null) {
+            return null;
+        }
+
+        if (envio.getPago().getFechaPago().equals(fechaObtener)) {
+            return envio.getPago();
         }
         return null;
     }
+
     // Métodos de Pago
-    public void registrarPago(Pago pagoRegistrar) {
-        this.pago = pagoRegistrar;
-        pagoRegistrar.setEnvio(this);
+    public boolean registrarPago(int idEnvio, Pago pago) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null || pago == null) {
+            return false;
+        }
+        envio.setPago(pago);
+        pago.setEnvio(envio);
+        return true;
     }
-    public void consultarComprobantePago() {
-        if (this.pago != null) {
+
+    public void consultarComprobantePago(int idEnvio) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null) {
+            System.out.println("Envío no encontrado.");
+            return;
+        }
+
+        if (envio.getPago() != null) {
             System.out.println("=== COMPROBANTE DE PAGO ===");
-            System.out.println("ID Envío: " + idEnvio);
-            System.out.println("Monto: $" + pago.getMonto());
-            System.out.println("Método de Pago: " + pago.getMetodoPago());
-            System.out.println("Fecha: " + pago.getFechaPago());
-            System.out.println("Estado: " + pago.getEstadoPago());
+            System.out.println("ID Envío: " + envio.getIdEnvio());
+            System.out.println("Monto: $" + envio.getPago().getMonto());
+            System.out.println("Método de Pago: " + envio.getPago().getMetodoPago());
+            System.out.println("Fecha: " + envio.getPago().getFechaPago());
+            System.out.println("Estado: " + envio.getPago().getEstadoPago());
             System.out.println("===========================");
         } else {
             System.out.println("No hay pago registrado para este envío.");
         }
     }
+
     // Métodos de Notificaciones (Patrón Observer)
-    public void agregarObserversNotificacion(INotificacionObserver observer) {
-        if(!listNotificaciones.contains(observer)){
-            listNotificaciones.add(observer);
+    public boolean agregarObserver(int idEnvio, INotificacionObserver observer) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null || observer == null) {
+            return false;
+        }
+
+        if (!envio.getListNotificaciones().contains(observer)) {
+            envio.getListNotificaciones().add(observer);
+        }
+        return true;
+    }
+
+    private void notificarObservers(Envio envio) {
+        if (envio.getListNotificaciones() != null) {
+            for (INotificacionObserver observer : envio.getListNotificaciones()) {
+                observer.actualizar(envio);
+            }
         }
     }
-    public void notificarObserversNotificacion() {
-        for (INotificacionObserver observer : listNotificaciones) {
-            observer.actualizar(this);
-        }
-    }
-    public String obtenerResumenIncidencias() {
-        if (listIncidencias.isEmpty()) {
+    public String obtenerResumenIncidencias(int idEnvio) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null || envio.obtenerIncidencias().isEmpty()) {
             return "No hay incidencias registradas para este envío.";
         }
 
         StringBuilder resumen = new StringBuilder();
         resumen.append("=== RESUMEN DE INCIDENCIAS ===\n");
-        resumen.append("Total de incidencias: ").append(listIncidencias.size()).append("\n\n");
+        resumen.append("Total de incidencias: ").append(envio.obtenerIncidencias().size()).append("\n\n");
 
-        for (int i = 0; i < listIncidencias.size(); i++) {
-            Incidencia inc = listIncidencias.get(i);
+        for (int i = 0; i < envio.obtenerIncidencias().size(); i++) {
+            Incidencia inc = envio.obtenerIncidencias().get(i);
             resumen.append("Incidencia #").append(i + 1).append(":\n");
             resumen.append(inc.obtenerResumen()).append("\n\n");
         }
 
         return resumen.toString();
     }
-    public Incidencia getIncidenciaActual() {
-        if (!listIncidencias.isEmpty()) {
-            return listIncidencias.get(listIncidencias.size() - 1);
+
+    public Incidencia obtenerIncidenciaActual(int idEnvio) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null || envio.obtenerIncidencias().isEmpty()) {
+            return null;
         }
-        return null;
+
+        return envio.obtenerIncidencias().get(envio.obtenerIncidencias().size() - 1);
     }
+    public boolean eliminarEnvio(int idEnvio) {
+        Envio envio = buscarEnvioEntity(idEnvio);
+        if (envio == null) {
+            return false;
+        }
+
+        envios.remove(envio);
+        return true;
+    }
+    public boolean existeEnvio(int idEnvio) {
+        return buscarEnvioEntity(idEnvio) != null;
+    }
+
 }

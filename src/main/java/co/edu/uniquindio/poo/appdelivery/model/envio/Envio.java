@@ -31,7 +31,7 @@ public class Envio {
     private List<INotificacionObserver> listNotificaciones;
 
     public Envio(int idEnvio, Direccion origen, Direccion destino, Paquete paquete,
-                 double costo, EstadoEnvio estado, LocalDateTime fechaCreacion,
+                 double costo, double distancioporKm,EstadoEnvio estado, LocalDateTime fechaCreacion,
                  LocalDateTime fechaEstimadaEntrega, Usuario usuario, Repartidor repartidor,
                  Pago pago, GestorTarifa gestorTarifa) {
         this.idEnvio = idEnvio;
@@ -39,6 +39,7 @@ public class Envio {
         this.destino = destino;
         this.paquete = paquete;
         this.costo = costo;
+        this.distanciaporKm = distancioporKm;
         this.estado = estado;
         this.fechaCreacion = fechaCreacion;
         this.fechaEstimadaEntrega = fechaEstimadaEntrega;
@@ -50,6 +51,7 @@ public class Envio {
         this.listNotificaciones = new ArrayList<>();
         this.listIncidencias = new ArrayList<>();
     }
+    public Envio(){}
 
     // Métodos de Servicios Adicionales
     public void agregarServicioAdicional(ServicioAdicional servicioAdicional) {
@@ -59,6 +61,14 @@ public class Envio {
     // Métodos de Incidencias
     public void agregarIncidencias(Incidencia incidencia) {
         this.listIncidencias.add(incidencia);
+    }
+
+    public List<ServicioAdicional> getServiciosAdicionales() {
+        return serviciosAdicionales;
+    }
+
+    public List<INotificacionObserver> getListNotificaciones() {
+        return listNotificaciones;
     }
 
     public List<Incidencia> obtenerIncidencias() {
@@ -133,6 +143,14 @@ public class Envio {
         return distanciaporKm;
     }
 
+    public Pago getPago() {
+        return pago;
+    }
+
+    public GestorTarifa getGestorTarifa() {
+        return gestorTarifa;
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -154,6 +172,25 @@ public class Envio {
         return "Envio ID: " + idEnvio +
                 ", Fecha estimada: " + fechaEstimadaEntrega +
                 ", Dirección destino: " + destino;
+    }
+
+    public void notificarObserversNotificacion() {
+        for (INotificacionObserver observer : listNotificaciones) {
+            observer.actualizar(this);
+        }
+    }
+    public double calcularCostoTotalEnvio() {
+        double costoTotal = this.costo;
+
+        for (ServicioAdicional servicio : serviciosAdicionales) {
+            costoTotal += servicio.getValorAsegurado();
+        }
+
+        return costoTotal;
+    }
+
+    public void setPago(Pago pago) {
+        this.pago = pago;
     }
 
 }

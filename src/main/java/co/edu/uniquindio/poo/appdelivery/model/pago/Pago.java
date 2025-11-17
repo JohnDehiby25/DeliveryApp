@@ -1,5 +1,7 @@
 package co.edu.uniquindio.poo.appdelivery.model.pago;
 
+import co.edu.uniquindio.poo.appdelivery.model.envio.Envio;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,6 +12,7 @@ public class Pago {
     private LocalDateTime fechaPago;
     private MetodoPago metodoPago;
     private EstadoPago estadoPago;
+    private Envio envio;
 
     public Pago(String idPago, double monto, LocalDateTime fechaPago, MetodoPago metodoPago, EstadoPago estadoPago) {
         this.idPago = idPago;
@@ -105,5 +108,13 @@ public class Pago {
             System.out.println("Error en la transacción, intente nuevamente.");
             return ResultadoPago.FALLIDO;
         }
+    }
+
+    public Envio getEnvio() {
+        return envio;
+    }
+
+    public void setEnvio(Envio envio) {
+        this.envio = envio;
     }
 }
