@@ -2,6 +2,7 @@ module co.edu.uniquindio.poo.appdelivery {
     requires javafx.controls;
     requires javafx.fxml;
     requires co.edu.uniquindio.poo.appdelivery;
+    requires java.desktop;
 
 
     opens co.edu.uniquindio.poo.appdelivery to javafx.fxml;
