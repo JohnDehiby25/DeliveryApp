@@ -43,10 +43,10 @@ public class EnvioMapper {
         dto.setPaquete(PaqueteMapper.toDTO(envio.getPaquete()));
 
         if (envio.getUsuario() != null)
-            dto.setIdUsuario(Integer.parseInt(envio.getUsuario().getId()));
+            dto.setIdUsuario(envio.getUsuario().getId());
 
         if (envio.getRepartidor() != null)
-            dto.setIdRepartidor(Integer.parseInt(envio.getRepartidor().getId()));
+            dto.setIdRepartidor(envio.getRepartidor().getId());
 
         return dto;
     }
