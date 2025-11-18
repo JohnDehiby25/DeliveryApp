@@ -1,14 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="co.edu.uniquindio.poo.appdelivery.controller.Repartidor"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="co.edu.uniquindio.poo.appdelivery.controller.RepartidorController"
+            stylesheets="@Styles.css"
+            prefHeight="750.0" prefWidth="1100.0">
 
-</AnchorPane>
+    <top>
+        <VBox alignment="CENTER" spacing="12" styleClass="header-repartidor">
+            <Label text="Panel de Repartidor" styleClass="titulo-principal"/>
+            <HBox spacing="25" alignment="CENTER">
+                <Label fx:id="lblDocumentoRepartidor" styleClass="label-info"/>
+                <Label fx:id="lblTotalEnvios" styleClass="label-info"/>
+            </HBox>
+            <Button text="Volver a Admin" onAction="#onVolverAdmin"
+                    styleClass="btn-oscuro" prefWidth="150"/>
+        </VBox>
+    </top>
+
+    <center>
+        <BorderPane>
+            <left>
+                <VBox spacing="18" styleClass="contenedor-padding-small" prefWidth="450">
+                    <Label text="Envíos Asignados" styleClass="titulo-seccion"/>
+
+                    <TableView fx:id="tablaEnvios" prefHeight="320">
+                        <columns>
+                            <TableColumn fx:id="colIdEnvio" text="ID" prefWidth="60"/>
+                            <TableColumn fx:id="colEstado" text="Estado" prefWidth="110"/>
+                            <TableColumn fx:id="colOrigen" text="Origen" prefWidth="120"/>
+                            <TableColumn fx:id="colDestino" text="Destino" prefWidth="120"/>
+                        </columns>
+                    </TableView>
+
+                    <Separator/>
+
+                    <Label text="Cambiar Estado del Envío" styleClass="titulo-seccion"/>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="Nuevo estado:" styleClass="label-bold"/>
+                        <ComboBox fx:id="cbNuevoEstado" prefWidth="170"/>
+                    </HBox>
+                    <HBox spacing="12">
+                        <Button text="Cambiar Estado" onAction="#onCambiarEstado" styleClass="btn-azul" prefWidth="140"/>
+                        <Button text="En Ruta" onAction="#onMarcarEnRuta" styleClass="btn-acento" prefWidth="110"/>
+                        <Button text="Entregado" onAction="#onMarcarEntregado" styleClass="btn-azul-claro" prefWidth="110"/>
+                    </HBox>
+
+                    <Separator/>
+
+                    <Label text="Gestión de Incidencias" styleClass="titulo-seccion"/>
+                    <TextField fx:id="txtTipoIncidencia" promptText="Tipo de incidencia (Retraso, Daño, Pérdida...)"/>
+                    <TextField fx:id="txtDescripcionIncidencia" promptText="Descripción detallada del problema"/>
+                    <HBox spacing="12">
+                        <Button text="Registrar Incidencia" onAction="#onRegistrarIncidencia"
+                                styleClass="btn-oscuro" prefWidth="200"/>
+                        <Button text="Ver Incidencias" onAction="#onVerIncidencias"
+                                styleClass="btn-gris" prefWidth="170"/>
+                    </HBox>
+
+                    <Separator/>
+
+                    <HBox spacing="12">
+                        <Button text="Ver Detalles" onAction="#onVerDetalles" styleClass="btn-morado" prefWidth="140"/>
+                        <Button text="Refrescar Lista" onAction="#onRefrescar" styleClass="btn-gris-claro" prefWidth="140"/>
+                    </HBox>
+                </VBox>
+            </left>
+
+            <center>
+                <VBox spacing="15" styleClass="contenedor-padding-small">
+                    <Label text="Detalles del Envío / Incidencias" styleClass="titulo-seccion"/>
+                    <Label text="Selecciona un envío y haz clic en 'Ver Detalles' o 'Ver Incidencias'"
+                           styleClass="label-gris-small"/>
+                    <TextArea fx:id="txtAreaDetalles" editable="false" prefHeight="620" styleClass="text-area-monospace"/>
+                </VBox>
+            </center>
+        </BorderPane>
+    </center>
+
+</BorderPane>

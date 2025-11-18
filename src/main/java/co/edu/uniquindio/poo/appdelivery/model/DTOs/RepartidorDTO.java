@@ -1,6 +1,8 @@
 package co.edu.uniquindio.poo.appdelivery.model.DTOs;
 
 
+import co.edu.uniquindio.poo.appdelivery.model.repartidor.TipoDisponibilidad;
+
 public class RepartidorDTO {
     private String id;
     private String nombre;
@@ -41,4 +43,13 @@ public class RepartidorDTO {
     public void setZonaCobertura(int zonaCobertura) { this.zonaCobertura = zonaCobertura; }
     public int getTotalEnviosAsignados() { return totalEnviosAsignados; }
     public void setTotalEnviosAsignados(int totalEnviosAsignados) { this.totalEnviosAsignados = totalEnviosAsignados; }
+
+    public TipoDisponibilidad getTipoDisponibilidad() {
+        return estado != null ? TipoDisponibilidad.valueOf(estado) : null;
+    }
+
+    public void setTipoDisponibilidad(TipoDisponibilidad tipo) {
+        this.estado = tipo != null ? tipo.name() : null;
+    }
+
 }

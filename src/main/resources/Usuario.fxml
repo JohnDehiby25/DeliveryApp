@@ -1,14 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="co.edu.uniquindio.poo.appdelivery.controller.Usuario"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="co.edu.uniquindio.poo.appdelivery.controller.UsuarioController"
+            stylesheets="@Styles.css"
+            prefHeight="750.0" prefWidth="1100.0">
 
-</AnchorPane>
+    <top>
+        <VBox alignment="CENTER" spacing="12" styleClass="header-usuario">
+            <Label text="Panel de Usuario" styleClass="titulo-principal"/>
+            <HBox spacing="25" alignment="CENTER">
+                <Label fx:id="lblNombreUsuario" styleClass="label-info"/>
+                <Label fx:id="lblTotalEnvios" styleClass="label-info"/>
+            </HBox>
+            <Button text="Volver a Admin" onAction="#onVolverAdmin"
+                    styleClass="btn-oscuro" prefWidth="150"/>
+        </VBox>
+    </top>
+
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE">
+
+            <Tab text="Mis Direcciones">
+                <BorderPane>
+                    <top>
+                        <VBox spacing="15" styleClass="contenedor-padding-small">
+                            <Label text="Gestionar Mis Direcciones" styleClass="titulo-seccion"/>
+                            <HBox spacing="12">
+                                <TextField fx:id="txtAlias" promptText="Alias (Casa, Oficina, etc.)" prefWidth="200"/>
+                                <TextField fx:id="txtCiudad" promptText="Ciudad" prefWidth="160"/>
+                                <TextField fx:id="txtCalle" promptText="Calle y número" prefWidth="300"/>
+                                <Button text="Agregar" onAction="#onAgregarDireccion"
+                                        styleClass="btn-azul" prefWidth="110"/>
+                                <Button text="Eliminar" onAction="#onEliminarDireccion"
+                                        styleClass="btn-oscuro" prefWidth="110"/>
+                            </HBox>
+                        </VBox>
+                    </top>
+                    <center>
+                        <TableView fx:id="tablaDirecciones">
+                            <columns>
+                                <TableColumn fx:id="colIdDir" text="ID" prefWidth="200"/>
+                                <TableColumn fx:id="colAlias" text="Alias" prefWidth="200"/>
+                                <TableColumn fx:id="colCiudad" text="Ciudad" prefWidth="200"/>
+                                <TableColumn fx:id="colCalle" text="Dirección Completa" prefWidth="400"/>
+                            </columns>
+                        </TableView>
+                    </center>
+                </BorderPane>
+            </Tab>
+
+            <Tab text="Mis Envíos">
+                <BorderPane>
+                    <top>
+                        <VBox spacing="15" styleClass="contenedor-padding-small">
+                            <Label text="Solicitar Nuevo Envío" styleClass="titulo-seccion"/>
+
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Label text="Origen:" styleClass="label-bold"/>
+                                <ComboBox fx:id="cbOrigen" promptText="Selecciona dirección origen" prefWidth="250"/>
+                                <Label text="Destino:" styleClass="label-bold"/>
+                                <ComboBox fx:id="cbDestino" promptText="Selecciona dirección destino" prefWidth="250"/>
+                            </HBox>
+
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Label text="Paquete:" styleClass="label-bold"/>
+                                <TextField fx:id="txtPeso" promptText="Peso (kg)" prefWidth="110"/>
+                                <TextField fx:id="txtAlto" promptText="Alto (cm)" prefWidth="110"/>
+                                <TextField fx:id="txtAncho" promptText="Ancho (cm)" prefWidth="110"/>
+                                <TextField fx:id="txtLargo" promptText="Largo (cm)" prefWidth="110"/>
+                            </HBox>
+
+                            <HBox spacing="12">
+                                <Button text="Solicitar Envío" onAction="#onSolicitarEnvio"
+                                        styleClass="btn-azul" prefWidth="160"/>
+                                <Button text="Cancelar Envío" onAction="#onCancelarEnvio"
+                                        styleClass="btn-oscuro" prefWidth="160"/>
+                            </HBox>
+                        </VBox>
+                    </top>
+                    <center>
+                        <TableView fx:id="tablaEnvios">
+                            <columns>
+                                <TableColumn fx:id="colIdEnvio" text="ID" prefWidth="80"/>
+                                <TableColumn fx:id="colEstado" text="Estado" prefWidth="150"/>
+                                <TableColumn fx:id="colOrigenEnvio" text="Origen" prefWidth="250"/>
+                                <TableColumn fx:id="colDestinoEnvio" text="Destino" prefWidth="250"/>
+                                <TableColumn fx:id="colCosto" text="Costo" prefWidth="120"/>
+                            </columns>
+                        </TableView>
+                    </center>
+                </BorderPane>
+            </Tab>
+
+            <Tab text="Pagos e Incidencias">
+                <BorderPane>
+                    <left>
+                        <VBox spacing="15" styleClass="contenedor-padding-small" prefWidth="450">
+                            <Label text="Realizar Pago de Envío" styleClass="titulo-seccion"/>
+
+                            <Label text="Selecciona el envío a pagar:" styleClass="label-bold"/>
+                            <TableView fx:id="tablaEnviosPago" prefHeight="280">
+                                <columns>
+                                    <TableColumn fx:id="colIdEnvioPago" text="ID" prefWidth="70"/>
+                                    <TableColumn fx:id="colCostoPago" text="Costo" prefWidth="120"/>
+                                    <TableColumn fx:id="colEstadoPago" text="Estado" prefWidth="180"/>
+                                </columns>
+                            </TableView>
+
+                            <Separator/>
+
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <Label text="Método de Pago:" styleClass="label-bold"/>
+                                <ComboBox fx:id="cbMetodoPago" prefWidth="180"/>
+                            </HBox>
+
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <Label text="Monto a Pagar:" styleClass="label-bold"/>
+                                <TextField fx:id="txtMontoPago" promptText="Ingresa el monto" prefWidth="180"/>
+                            </HBox>
+
+                            <Button text="Realizar Pago" onAction="#onRealizarPago"
+                                    styleClass="btn-azul" prefWidth="250" prefHeight="40"/>
+
+                            <Separator/>
+
+                            <Button text="Consultar Mis Incidencias" onAction="#onConsultarIncidencias"
+                                    styleClass="btn-gris-claro" prefWidth="250"/>
+                        </VBox>
+                    </left>
+
+                    <center>
+                        <VBox spacing="12" styleClass="contenedor-padding-small">
+                            <Label text="Comprobante de Pago / Detalles" styleClass="titulo-seccion"/>
+                            <TextArea fx:id="txtAreaComprobante" editable="false" prefHeight="600"
+                                      styleClass="text-area-monospace"/>
+                        </VBox>
+                    </center>
+                </BorderPane>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+</BorderPane>

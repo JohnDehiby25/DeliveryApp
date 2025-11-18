@@ -1,14 +1,237 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="co.edu.uniquindio.poo.appdelivery.controller.AdminController"
-            prefHeight="400.0" prefWidth="600.0">
+            stylesheets="@styles.css"
+            prefHeight="800.0" prefWidth="1400.0">
 
-</AnchorPane>
+    <top>
+        <VBox alignment="CENTER" spacing="15" styleClass="header-admin">
+            <Label text="PANEL DE ADMINISTRADOR" styleClass="titulo-principal"/>
+            <HBox spacing="20" alignment="CENTER">
+                <Button text="Vista Usuario" onAction="#onIrAUsuario"
+                        styleClass="btn-azul" prefWidth="160" prefHeight="40"/>
+                <Button text="Vista Repartidor" onAction="#onIrARepartidor"
+                        styleClass="btn-morado" prefWidth="160" prefHeight="40"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE">
+
+            <Tab text="Usuarios">
+                <VBox spacing="20" styleClass="contenedor-padding">
+                    <Label text="Gestión de Usuarios" styleClass="titulo-grande"/>
+
+                    <GridPane hgap="15" vgap="15">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="120"/>
+                            <ColumnConstraints minWidth="250"/>
+                            <ColumnConstraints minWidth="120"/>
+                            <ColumnConstraints minWidth="250"/>
+                        </columnConstraints>
+
+                        <Label text="ID:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="label-bold"/>
+                        <TextField fx:id="txtIdUsuario" GridPane.columnIndex="1" GridPane.rowIndex="0" promptText="Ingresa ID"/>
+
+                        <Label text="Nombre:" GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="label-bold"/>
+                        <TextField fx:id="txtNombreUsuario" GridPane.columnIndex="3" GridPane.rowIndex="0" promptText="Nombre completo"/>
+
+                        <Label text="Teléfono:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="label-bold"/>
+                        <TextField fx:id="txtTelefonoUsuario" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Teléfono"/>
+
+                        <Label text="Email:" GridPane.columnIndex="2" GridPane.rowIndex="1" styleClass="label-bold"/>
+                        <TextField fx:id="txtEmailUsuario" GridPane.columnIndex="3" GridPane.rowIndex="1" promptText="correo@ejemplo.com"/>
+                    </GridPane>
+
+                    <HBox spacing="15" alignment="CENTER">
+                        <Button text="Registrar" onAction="#onRegistrarUsuario"
+                                styleClass="btn-azul" prefWidth="130" prefHeight="35"/>
+                        <Button text="Actualizar" onAction="#onActualizarUsuario"
+                                styleClass="btn-gris" prefWidth="130" prefHeight="35"/>
+                        <Button text="Eliminar" onAction="#onEliminarUsuario"
+                                styleClass="btn-oscuro" prefWidth="130" prefHeight="35"/>
+                    </HBox>
+
+                    <TableView fx:id="tablaUsuarios" prefHeight="450">
+                        <columns>
+                            <TableColumn fx:id="colIdUsuario" text="ID" prefWidth="120"/>
+                            <TableColumn fx:id="colNombreUsuario" text="Nombre Completo" prefWidth="400"/>
+                            <TableColumn fx:id="colTelefonoUsuario" text="Teléfono" prefWidth="180"/>
+                            <TableColumn fx:id="colEmailUsuario" text="Email" prefWidth="400"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <Tab text="Repartidores">
+                <VBox spacing="20" styleClass="contenedor-padding">
+                    <Label text="Gestión de Repartidores" styleClass="titulo-grande"/>
+
+                    <GridPane hgap="15" vgap="15">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="120"/>
+                            <ColumnConstraints minWidth="220"/>
+                            <ColumnConstraints minWidth="120"/>
+                            <ColumnConstraints minWidth="220"/>
+                        </columnConstraints>
+
+                        <Label text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="label-bold"/>
+                        <TextField fx:id="txtNombreRepartidor" GridPane.columnIndex="1" GridPane.rowIndex="0" promptText="Nombre"/>
+
+                        <Label text="ID:" GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="label-bold"/>
+                        <TextField fx:id="txtIdRepartidor" GridPane.columnIndex="3" GridPane.rowIndex="0" promptText="ID"/>
+
+                        <Label text="Documento:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="label-bold"/>
+                        <TextField fx:id="txtDocumentoRepartidor" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Documento"/>
+
+                        <Label text="Teléfono:" GridPane.columnIndex="2" GridPane.rowIndex="1" styleClass="label-bold"/>
+                        <TextField fx:id="txtTelefonoRepartidor" GridPane.columnIndex="3" GridPane.rowIndex="1" promptText="Teléfono"/>
+
+                        <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="label-bold"/>
+                        <TextField fx:id="txtEmailRepartidor" GridPane.columnIndex="1" GridPane.rowIndex="2" promptText="Email"/>
+
+                        <Label text="Zona:" GridPane.columnIndex="2" GridPane.rowIndex="2" styleClass="label-bold"/>
+                        <TextField fx:id="txtZonaCobertura" GridPane.columnIndex="3" GridPane.rowIndex="2" promptText="Zona"/>
+                    </GridPane>
+
+                    <HBox spacing="15" alignment="CENTER">
+                        <Label text="Disponibilidad:" styleClass="label-bold"/>
+                        <ComboBox fx:id="cbDisponibilidad" prefWidth="180"/>
+                        <Button text="Registrar" onAction="#onRegistrarRepartidor" styleClass="btn-azul" prefWidth="130"/>
+                        <Button text="Cambiar Disp." onAction="#onCambiarDisponibilidad" styleClass="btn-acento" prefWidth="150"/>
+                        <Button text="Eliminar" onAction="#onEliminarRepartidor" styleClass="btn-oscuro" prefWidth="120"/>
+                    </HBox>
+
+                    <TableView fx:id="tablaRepartidores" prefHeight="400">
+                        <columns>
+                            <TableColumn fx:id="colIdRepartidor" text="ID" prefWidth="100"/>
+                            <TableColumn fx:id="colNombreRepartidor" text="Nombre" prefWidth="300"/>
+                            <TableColumn fx:id="colDocumento" text="Documento" prefWidth="180"/>
+                            <TableColumn fx:id="colDisponibilidad" text="Disponibilidad" prefWidth="180"/>
+                            <TableColumn fx:id="colZona" text="Zona" prefWidth="120"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <Tab text="Asignaciones">
+                <HBox spacing="0">
+                    <VBox spacing="20" styleClass="contenedor-padding" prefWidth="700">
+                        <Label text="Envíos Pendientes" styleClass="titulo-seccion"/>
+                        <TableView fx:id="tablaEnviosPendientes" prefHeight="250">
+                            <columns>
+                                <TableColumn fx:id="colIdEnvioPend" text="ID" prefWidth="80"/>
+                                <TableColumn fx:id="colOrigenPend" text="Origen" prefWidth="280"/>
+                                <TableColumn fx:id="colDestinoPend" text="Destino" prefWidth="280"/>
+                            </columns>
+                        </TableView>
+
+                        <Separator/>
+
+                        <Label text="Repartidores Disponibles" styleClass="titulo-seccion"/>
+                        <TableView fx:id="tablaRepartidoresDisp" prefHeight="250">
+                            <columns>
+                                <TableColumn fx:id="colDocDisp" text="Documento" prefWidth="150"/>
+                                <TableColumn fx:id="colNombreDisp" text="Nombre" prefWidth="300"/>
+                                <TableColumn fx:id="colZonaDisp" text="Zona" prefWidth="100"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+
+                    <VBox spacing="30" alignment="CENTER" styleClass="panel-gris">
+                        <Label text="Asignar Envío" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2d3747;"/>
+
+                        <VBox spacing="15" alignment="CENTER">
+                            <Label text="1. Selecciona un envío pendiente" styleClass="label-gris"/>
+                            <Label text="2. Selecciona un repartidor" styleClass="label-gris"/>
+                            <Label text="3. Haz clic en Asignar" styleClass="label-gris"/>
+                        </VBox>
+
+                        <Button text="ASIGNAR ENVÍO" onAction="#onAsignarEnvio"
+                                styleClass="btn-azul" prefWidth="250" prefHeight="60"/>
+
+                        <Separator prefWidth="300"/>
+
+                        <Button text="Reasignar Envío" onAction="#onReasignarEnvio"
+                                styleClass="btn-gris-claro" prefWidth="220" prefHeight="40"/>
+                    </VBox>
+                </HBox>
+            </Tab>
+
+            <Tab text="Filtros">
+                <VBox spacing="25" styleClass="contenedor-padding">
+                    <Label text="Filtros de Repartidores" styleClass="titulo-grande"/>
+
+                    <GridPane hgap="20" vgap="20">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="200"/>
+                            <ColumnConstraints minWidth="250"/>
+                            <ColumnConstraints minWidth="250"/>
+                        </columnConstraints>
+
+                        <Label text="Filtrar por Zona:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="label-info"/>
+                        <TextField fx:id="txtFiltroZona" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                   promptText="Número de zona" prefWidth="200"/>
+                        <Button text="Filtrar por Zona" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                                onAction="#onFiltrarPorZona" styleClass="btn-azul" prefWidth="200"/>
+
+                        <Label text="Disponibilidad:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="label-info"/>
+                        <ComboBox fx:id="cbFiltroDisponibilidad" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="200"/>
+                        <Button text="Filtrar por Disponibilidad" GridPane.columnIndex="2" GridPane.rowIndex="1"
+                                onAction="#onFiltrarPorDisponibilidad" styleClass="btn-morado" prefWidth="200"/>
+                    </GridPane>
+
+                    <TableView fx:id="tablaRepartidoresFiltrados" prefHeight="500">
+                        <columns>
+                            <TableColumn fx:id="colDocFiltro" text="Documento" prefWidth="220"/>
+                            <TableColumn fx:id="colNombreFiltro" text="Nombre" prefWidth="400"/>
+                            <TableColumn fx:id="colDispFiltro" text="Disponibilidad" prefWidth="220"/>
+                            <TableColumn fx:id="colZonaFiltro" text="Zona" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <Tab text="Reportes">
+                <VBox spacing="20" styleClass="contenedor-padding">
+                    <Label text="Generador de Reportes del Sistema" styleClass="titulo-grande"/>
+                    <HBox spacing="15" alignment="CENTER">
+                        <Button text="Reporte General" onAction="#onGenerarReporteGeneral"
+                                styleClass="btn-gris" prefWidth="180" prefHeight="40"/>
+                        <Button text="Repartidores" onAction="#onGenerarReporteRepartidores"
+                                styleClass="btn-azul-claro" prefWidth="180" prefHeight="40"/>
+                        <Button text="Disponibilidad" onAction="#onReporteDisponibilidad"
+                                styleClass="btn-acento" prefWidth="180" prefHeight="40"/>
+                        <Button text="Pendientes" onAction="#onVerEnviosPendientes"
+                                styleClass="btn-oscuro" prefWidth="180" prefHeight="40"/>
+                    </HBox>
+                    <TextArea fx:id="txtAreaReporte" editable="false" prefHeight="600" styleClass="text-area-monospace"/>
+                </VBox>
+            </Tab>
+
+            <Tab text="Pagos">
+                <VBox spacing="25" styleClass="contenedor-padding">
+                    <Label text="Consulta de Comprobantes de Pago" styleClass="titulo-grande"/>
+
+                    <HBox spacing="20" alignment="CENTER_LEFT">
+                        <Label text="ID del Pago:" styleClass="label-info"/>
+                        <TextField fx:id="txtIdPagoConsulta" promptText="Ejemplo: PAG-123456" prefWidth="300"/>
+                        <Button text="Consultar Comprobante" onAction="#onConsultarComprobante"
+                                styleClass="btn-azul" prefWidth="250" prefHeight="40"/>
+                    </HBox>
+
+                    <Label text="Información del Comprobante:" styleClass="titulo-seccion"/>
+                    <TextArea fx:id="txtAreaPagos" editable="false" prefHeight="550" styleClass="text-area-monospace"/>
+                </VBox>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+</BorderPane>

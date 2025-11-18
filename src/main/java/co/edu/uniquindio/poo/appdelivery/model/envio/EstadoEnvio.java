@@ -6,5 +6,5 @@ public enum EstadoEnvio {
     EN_RUTA,
     ENTREGADO,
     INCIDENCIA,
-    CANCELADO;
+    CANCELADO, ENRUTA;
 }

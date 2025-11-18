@@ -14,8 +14,17 @@ public abstract class Pago {
     protected LocalDate fechaPago;
     protected EstadoPago estadoPago;
     protected Envio envio;
+    protected ProcesadorPago procesadorPago;
 
     public abstract ProcesadorPago crearProcesador();
+
+    public void setProcesadorPago(ProcesadorPago procesador) {
+        this.procesadorPago = procesador;
+    }
+
+    public ProcesadorPago getProcesadorPago() {
+        return procesadorPago;
+    }
 
     public boolean validarPago() {
         if (monto <= 0) {
@@ -35,7 +44,6 @@ public abstract class Pago {
     }
 
     public void pagarTarifa() {
-
         double total = GestorTarifa.getInstance()
                 .getTarifa()
                 .calcularTotalTarifa(envio);
@@ -46,7 +54,8 @@ public abstract class Pago {
             return;
         }
 
-        ProcesadorPago procesador = crearProcesador();
+        // Usar el procesador asignado o crear uno nuevo
+        ProcesadorPago procesador = procesadorPago != null ? procesadorPago : crearProcesador();
 
         ResultadoPago resultado = procesador.procesar(total);
 
@@ -125,6 +134,7 @@ public abstract class Pago {
     public LocalDate getFechaPago() {
         return fechaPago;
     }
+
 
 }
 
